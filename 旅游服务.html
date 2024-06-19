@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>滚动式网页</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.section {
+    height: 100vh; /* 设置每个部分铺满整个屏幕高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.section:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.section:nth-child(odd) {
+    background-color: #e9e9e9;
+}
+
+#video-section {
+    position: relative;
+}
+
+#video-container {
+	position: absolute;
+	top: -4px;
+	left: -5px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+#video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 让视频充满容器 */
+}
+
+#weather-time {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.search-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    background-color: rgba(51, 51, 51, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.search-bar button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+#slideshow-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 300px; /* 容器宽度 */
+    height: 200px; /* 容器高度 */
+    overflow: hidden;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+#slideshow {
+    display: flex;
+    width: 1200px; /* 容器宽度 * 图片数量 */
+    transition: transform 0.5s ease;
+}
+
+#slideshow img {
+    width: 300px; /* 容器宽度 */
+    height: 200px; /* 容器高度 */
+    transition: transform 0.3s ease; /* 添加放大效果的过渡 */
+}
+
+#slideshow img:hover {
+    transform: scale(1.1); /* 鼠标移动到图片上时放大 */
+}
+
+#prevBtn, #nextBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+#prevBtn {
+    left: 10px;
+}
+
+#nextBtn {
+    right: 10px;
+}
+
+#slide-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 150px;
+    height: 250px;
+    text-align: center;
+}
+
+.product-container img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+#video-2 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 400px;
+    height: 300px;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+#video-3 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 150px;
+    height: 150px;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+</style>
+</head>
+<body>
+<div class="section" id="video-section">
+    <h1></h1>
+    <p></p>
+    <div id="video-container">
+		<div class="search-bar">
+    <input type="text" placeholder="请输入搜索内容...">
+    <button>搜索</button>
+</div>
+        <video src="pic/background-video6.mp4" autoplay muted loop></video>
+    </div>
+    <div id="weather-time"></div>
+</div>
+<div class="section">
+    <h1></h1>
+    <p></p>
+    <div id="slideshow-container">
+        <div id="slideshow">
+            <img src="pic/t1.jpg" alt="Photo 1">
+            <img src="pic/t2.jpg" alt="Photo 2">
+            <img src="pic/t3.jpg" alt="Photo 3">
+            <img src="pic/t4.jpg" alt="Photo 4">
+        </div>
+        <div id="slide-indicators"></div>
+        <button id="prevBtn" onclick="plusSlides(-1)">❮</button>
+        <button id="nextBtn" onclick="plusSlides(1)">❯</button>
+    </div>
+    <div id="hotel-recommendations" style="width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; margin: 0 auto; text-align: center;">
+        <h2 style="color: #FF69B4; font-size: 24px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">旅游产品推荐</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <div class="product-container">
+                <img src="pic/d1.jpg" alt="Product 1">
+                <p>美味烧烤</p>
+                <p>价格：$100</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d2.jpg" alt="Product 2">
+                <p>温泉面膜</p>
+                <p>价格：$500</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d3.jpg" alt="Product 3">
+                <p>长安游乐园</p>
+                <p>价格：$300</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d4.jpg" alt="Product 4">
+                <p>济南动物园</p>
+                <p>价格：$150</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d5.jpg" alt="Product 5">
+                <p>旅游纪念品</p>
+                <p>价格 $20/个</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d6.jpg" alt="Product 6">
+                <p>四川文旅纪念品</p>
+                <p>价格：$25/个</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d7.jpg" alt="Product 7">
+                <p>民族装饰纪念品</p>
+                <p>价格：$18/个</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d8.jpg" alt="Product 7">
+                <p>成都火锅</p>
+                <p>价格：$180/人</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d9.jpg" alt="Product 7">
+                <p>云南年糕</p>
+                <p>价格：$40/20个</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d10.jpg" alt="Product 7">
+                <p>麻辣鱼锅</p>
+                <p>价格：$170/人</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d11.jpg" alt="Product 7">
+                <p>海南烤鸡</p>
+                <p>价格：$15/个</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d12.jpg" alt="Product 7">
+                <p>新疆烤羊</p>
+                <p>价格：$400/只</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/d13.jpg" alt="Product 7">
+                <p>陕西泥人</p>
+                <p>价格：$50/个</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/d14.jpg" alt="Product 8">
+                <p>玩具熊</p>
+                <p>价格：$60/个</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="section">
+    <h1></h1>
+    <p></p>
+    <div id="hotel-recommendations" style="width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; margin: 0 auto; text-align: center;">
+        <h2 style="color: #FF69B4; font-size: 24px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">酒店入住推荐</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <div class="product-container">
+                <img src="pic/f1.jpg" alt="Product 1">
+                <p>希尔顿酒店</p>
+                <p>价格：$1000/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f2.jpg" alt="Product 2">
+                <p>大理国际酒店</p>
+                <p>价格：$500/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f3.jpg" alt="Product 3">
+                <p>七三酒店</p>
+                <p>价格：$300/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f4.jpg" alt="Product 4">
+                <p>天鸣酒店</p>
+                <p>价格：$700/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f5.jpg" alt="Product 5">
+                <p>海景酒店</p>
+                <p>价格：$250/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f6.jpg" alt="Product 6">
+                <p>豪华酒店</p>
+                <p>价格：$200/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f7.jpg" alt="Product 7">
+                <p>山景酒店</p>
+                <p>价格：$180/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f14.jpg" alt="Product 7">
+                <p>美景酒店</p>
+                <p>价格：$180/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f8.jpg" alt="Product 7">
+                <p>温泉酒店</p>
+                <p>价格：$1000/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f9.jpg" alt="Product 7">
+                <p>成都大酒店</p>
+                <p>价格：$1800/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f13.jpg" alt="Product 7">
+                <p>陕西大酒店</p>
+                <p>价格：$1800/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f10.jpg" alt="Product 7">
+                <p>国际酒店</p>
+                <p>价格：$1000/晚</p>
+            </div>
+			<div class="product-container">
+                <img src="pic/f11.jpg" alt="Product 7">
+                <p>三好酒店</p>
+                <p>价格：$1800/晚</p>
+            </div>
+            <div class="product-container">
+                <img src="pic/f12.jpg" alt="Product 8">
+                <p>市中心酒店</p>
+                <p>价格：$220/晚</p>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="主页面.html">返回页面</a>
+</div>
+
+<script>
+// 获取天气和时间信息
+function getWeatherAndTime() {
+    // 这里是获取天气信息的代码，你可以使用天气API或其他方式获取
+    const weather = "晴";
+
+    // 获取当前时间
+    const now = new Date();
+    const time = now.toLocaleTimeString();
+
+    return { weather, time };
+}
+
+// 更新天气和时间显示
+function updateWeatherAndTime() {
+    const weatherTimeElement = document.getElementById('weather-time');
+    const { weather, time } = getWeatherAndTime();
+
+    weatherTimeElement.innerHTML = `${weather} ${time}`;
+}
+
+// 每秒更新一次天气和时间显示
+setInterval(updateWeatherAndTime, 1000);
+
+// 图片轮播功能
+let slideIndex = 0;
+const slides = document.querySelectorAll('#slideshow img');
+const indicators = document.getElementById('slide-indicators');
+
+function showSlides(n) {
+    if (n >= slides.length) slideIndex = 0;
+    if (n < 0) slideIndex = slides.length - 1;
+    slides.forEach((slide, index) => {
+        slide.style.display = index === slideIndex ? 'block' : 'none';
+    });
+    updateIndicators();
+}
+
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function updateIndicators() {
+    indicators.innerHTML = '';
+    slides.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.onclick = () => currentSlide(index);
+        if (index === slideIndex) {
+            dot.style.backgroundColor = 'white';
+        }
+        indicators.appendChild(dot);
+    });
+}
+
+function autoShowSlides() {
+    plusSlides(1);
+    setTimeout(autoShowSlides, 5000); // 每5秒切换一次图片
+}
+
+showSlides(slideIndex);
+autoShowSlides();
+</script>
+</body>
+</html>

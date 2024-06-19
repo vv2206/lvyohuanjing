@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>旅游与环境保护喜好调查表</title>
+<style>
+	 .back-button {
+        display: inline-block; /* 使按钮在同一行显示 */
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none; /* 移除下划线 */
+    }
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+    input, select, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box; /* 防止宽度增加 */
+    }
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background-color: #218838;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>旅游与环境保护喜好调查表</h2>
+    <form id="surveyForm">
+        <label for="name">姓名:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="age">年龄:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="travelStyle">您更喜欢哪种旅游方式？</label>
+        <select id="travelStyle" name="travelStyle">
+            <option value="nature">自然风光</option>
+            <option value="culture">文化遗产</option>
+            <option value="urban">城市体验</option>
+        </select>
+
+        <label for="conservation">您认为环境保护重要吗？</label>
+        <textarea id="conservation" name="conservation" rows="4" placeholder="请描述您的看法"></textarea>
+
+        <button type="submit">提交调查</button>
+    </form>
+</div>
+	<div class="container">
+    <h2>旅游与环境保护喜好调查表</h2>
+    <a href="主页面.html">返回主页面</a>
+</div>
+
+<script>
+    // 自定义函数，用于处理表单提交事件
+    function submitSurvey(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+        const formData = new FormData(event.target);
+        const surveyData = {
+            name: formData.get('name'),
+            age: formData.get('age'),
+            travelStyle: formData.get('travelStyle'),
+            conservation: formData.get('conservation')
+        };
+        console.log('Survey submitted:', surveyData); // 可以在这里添加代码将数据发送到服务器
+
+        // 显示提交成功的消息
+        alert('感谢您的参与！');
+        // 可以选择重置表单或者清除输入数据
+        // document.getElementById('surveyForm').reset();
+    }
+
+    // 页面加载完成事件
+    document.addEventListener('DOMContentLoaded', function() {
+        // 鼠标键盘事件：当用户在输入框中输入时
+        document.getElementById('name').addEventListener('input', function() {
+            this.style.borderColor = (this.value.length > 0) ? 'green' : '#ddd';
+        });
+
+        // 表单事件：当表单提交时
+        document.getElementById('surveyForm').addEventListener('submit', submitSurvey);
+    });
+
+    // 编辑事件：当用户在文本区域内编辑内容时
+    document.getElementById('conservation').addEventListener('input', function() {
+        const conservationLength = this.value.length;
+        if (conservationLength > 200) {
+            this.style.borderColor = 'red';
+        } else {
+            this.style.borderColor = '#ddd';
+        }
+    });
+</script>
+</body>
+</html>

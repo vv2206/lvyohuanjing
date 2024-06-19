@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>环境保护团队加入表单</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f2f2f2;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  .team-name {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .team-name h2 {
+    color: #4CAF50;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .team-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .team-card {
+    padding: 10px;
+    text-align: center;
+    background-color: #e0f2f1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 200px;
+  }
+  
+  .team-card h3 {
+    color: #4CAF50;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .team-card p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .join-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .join-button:hover {
+    background-color: #45a049;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="team-name">
+    <h2>环境保护团队</h2>
+    <p>选择一个团队加入：</p>
+  </div>
+  
+  <div class="team-list">
+    <div class="team-card">
+      <h3>环保小天使</h3>
+      <p>致力于环保教育与志愿活动</p>
+      <form id="joinForm1" onsubmit="joinTeam('环保小天使'); return false;">
+        <input type="text" name="name" placeholder="姓名" required>
+        <input type="email" name="email" placeholder="邮箱" required>
+        <button type="submit" class="join-button">加入</button>
+      </form>
+    </div>
+    
+    <div class="team-card">
+      <h3>绿色行动组</h3>
+      <p>推动城市绿化和废物回收计划</p>
+      <form id="joinForm2" onsubmit="joinTeam('绿色行动组'); return false;">
+        <input type="text" name="name" placeholder="姓名" required>
+        <input type="email" name="email" placeholder="邮箱" required>
+        <button type="submit" class="join-button">加入</button>
+      </form>
+    </div>
+    
+    <div class="team-card">
+      <h3>清洁地球团队</h3>
+      <p>清理海滩和保护野生动物</p>
+      <form id="joinForm3" onsubmit="joinTeam('清洁地球团队'); return false;">
+        <input type="text" name="name" placeholder="姓名" required>
+        <input type="email" name="email" placeholder="邮箱" required>
+        <button type="submit" class="join-button">加入</button>
+      </form>
+    </div>
+    
+    <div class="team-card">
+      <h3>绿色卫士联盟</h3>
+      <p>保护森林和开展环保宣传</p>
+      <form id="joinForm4" onsubmit="joinTeam('绿色卫士联盟'); return false;">
+        <input type="text" name="name" placeholder="姓名" required>
+        <input type="email" name="email" placeholder="邮箱" required>
+        <button type="submit" class="join-button">加入</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p id="modalText"></p>
+    <button type="button" onclick="joinTeam()">是</button>
+    <button type="button" onclick="closeModal()">否</button>
+  </div>
+</div>
+
+<script>
+var modal = document.getElementById('myModal');
+var modalText = document.getElementById('modalText');
+
+function openModal(teamName) {
+  modalText.textContent = "是否加入 " + teamName + "？";
+  modal.style.display = 'block';
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+}
+
+function joinTeam(teamName) {
+  alert('加入成功！团队：' + teamName);
+  closeModal();
+}
+</script>
+
+</body>
+</html>

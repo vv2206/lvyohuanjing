@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>历史人文百科</title>
+    <style>
+        body {
+            background-image: url('pic/p.jpg'); /* 背景图像的路径 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            color: white; /* 将字体颜色改为白色 */
+        }
+
+        .menu {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .submenu {
+            display: none;
+        }
+
+        .menu-item:hover .submenu {
+            display: block;
+            position: absolute;
+            background-color: black;
+            color: white;
+            padding: 10px;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-item"><a href="主页面.html">主页</a></div>
+        <div class="menu-item">
+            历史人文
+            <div class="submenu">
+                <p><a href="古诗鉴赏.html">古诗鉴赏</a></p>
+                <p><a href="人物传记.html">人物传记</a></p>
+            </div>
+        </div>
+        <div class="menu-item">
+            生态治理
+            <div class="submenu">
+				<p></p><a href="https://www.bilibili.com/" >视频跳转</a></p>
+                <p><a href="环境保护团队.html">环境保护团队</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+    </div>
+</body>
+</html>

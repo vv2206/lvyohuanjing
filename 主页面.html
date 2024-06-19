@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Background</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+		  /* 侧边栏样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1em;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .sidebar a {
+            color: yellow;
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 0, 0.5); /* 黄色背景 */
+        }
+        
+        /* 音乐控制按钮样式 */
+        .audio-control {
+            margin-bottom: 20px;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        #bgVideo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        /* ... 其他样式 ... */
+        /* 添加音乐播放控制按钮的样式 */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            padding: 10px;
+        }
+        .audio-control button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            outline: none;
+            border-radius: 5px;
+            font-size: 1.5em;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            margin-top: 40px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .menu a {
+            color: green;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.5em;
+            animation: colorChange 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes colorChange {
+            0% {
+                color: green;
+            }
+
+            50% {
+                color: yellow;
+            }
+
+            100% {
+                color: green;
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .contact-box {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00bfbf;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .contact-box p {
+            color: white;
+            margin: 5px;
+        }
+
+        /* 图片容器样式 */
+        .image-container {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-width: 800px;
+            height: 300px;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s;
+        }
+
+        /* 控制按钮样式 */
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .control-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            outline: none;
+            border-radius: 5px;
+            font-size: 1.5em;
+        }
+
+        #pageDots {
+            display: inline-block;
+        }
+
+        /* 登录表单样式 */
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2;
+            width: 300px;
+            text-align: left;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container h2 {
+            color: #00bfbf;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #00bfbf;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .form-container button:hover {
+            background-color: #008f8f;
+        }
+
+        /* 提交成功弹窗样式 */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 3;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .popup p {
+            color: white;
+            margin: 0;
+        }
+
+        /* 美化问卷调查表单 */
+        .form-container label {
+            color: white;
+        }
+
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-container textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+	<!-- 侧边栏 -->
+    <div class="sidebar">
+        <div class="audio-control">
+            <audio id="bgMusic" autoplay loop>
+                <source src="pic/mu1.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+			<button onclick="toggleMusic()" class="sidebar-link">音乐</button>
+        </div>
+        <a href="#" class="sidebar-link"onclick="showMaintenance()">关于</a>
+		<a href="附页.html">网页简介</a>
+        <a href="#" class="sidebar-link" onclick="showMaintenance()">开发者建议</a>
+        <a href="#" class="sidebar-link" onclick="showMaintenance()">开发者名单</a>
+        <a href="#" class="sidebar-link" onclick="showMaintenance()">设置</a>
+        <a href="#" class="sidebar-link" onclick="showMaintenance()">广告投标</a>
+        <a href="#" class="sidebar-link" onclick="showMaintenance()">软件下载</a>
+		<a href="附页2.html">调查表</a>
+        <div class="form-container" id="developerSuggestionsForm">
+        <h2>开发者建议</h2>
+        <form>
+            <label for="suggestion">请输入您的建议：</label>
+            <textarea id="suggestion" rows="4" required></textarea>
+            <button type="submit" onclick="submitSuggestion()">提交</button>
+            <button type="button" onclick="hideDeveloperSuggestions()">返回</button>
+        </form>
+        </div>
+    </div>
+	<!-- 音乐播放器 -->
+    <div class="audio-control">
+        <audio id="bgMusic" autoplay loop>
+            <source src="pic/mu1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <button onclick="toggleMusic()"></button>
+    </div>
+    <video id="bgVideo" autoplay muted loop>
+        <source src="pic/background-video1.mp4" type="video/mp4">
+        <source src="pic/background-video1.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+    <div class="content">
+        <div class="menu">
+            <a href="野生动物百科.html">野生动物百科</a>
+            <a href="自然风景百科.html">自然风景百科</a>
+            <a href="历史人文百科.html">历史人文百科</a>
+            <a href="旅游服务.html">旅游服务</a>
+            <a onclick="showLoginForm()">登录</a>
+            <a onclick="showSurveyForm()">问卷调查</a>
+        </div>
+    </div>
+    <div class="contact-box">
+        <p>联系电话：12345678</p>
+        <p>作者邮箱：1234567@qq.com</p>
+        <p>网页开发联动：中国文旅局</p>
+    </div>
+
+    <!-- 图片容器和控制按钮 -->
+    <div class="image-container" id="imageContainer">
+        <img src="pic/image1.jpg" alt="Image 1">
+        <img src="pic/image2.jpg" alt="Image 2">
+        <img src="pic/image3.jpg" alt="Image 3">
+        <img src="pic/image4.jpg" alt="Image 4">
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="controls">
+        <button class="control-button" onclick="prevImage()"><i class="fas fa-chevron-left"></i></button>
+        <span id="pageDots"></span>
+        <button class="control-button" onclick="nextImage()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <!-- 登录表单 -->
+    <div class="form-container" id="loginForm">
+        <h2>登录</h2>
+        <input type="text" placeholder="账号" id="username">
+        <input type="password" placeholder="密码" id="password">
+        <button onclick="login()">登录</button>
+        <button onclick="hideLoginForm()">返回</button>
+    </div>
+
+    <!-- 问卷调查表单 -->
+    <div class="form-container" id="surveyForm">
+        <h2>问卷调查</h2>
+        <label for="q1">你喜欢这个网站吗？</label>
+        <select id="q1">
+            <option value="yes">是</option>
+            <option value="no">否</option>
+        </select>
+        <label for="q2">你会推荐这个网站给朋友吗？</label>
+        <select id="q2">
+            <option value="yes">是</option>
+            <option value="no">否</option>
+        </select>
+        <label for="q3">你最喜欢网站的哪一部分？</label>
+        <select id="q3">
+            <option value="wildlife">野生动物百科</option>
+            <option value="nature">自然风景百科</option>
+            <option value="history">历史人文百科</option>
+            <option value="services">旅游服务</option>
+        </select>
+        <label for="q4">你对网站有什么建议或意见？</label>
+        <textarea id="q4" rows="4"></textarea>
+        <button onclick="submitSurvey()">提交</button>
+        <button onclick="hideSurveyForm()">退出</button>
+    </div>
+
+    <!-- 提交成功弹窗 -->
+    <div class="popup" id="popup">
+        <p id="popupMessage"></p>
+    </div>
+
+    <script>
+        var imageContainer = document.getElementById('imageContainer');
+        var images = imageContainer.getElementsByTagName('img');
+        var totalImages = images.length;
+        var currentIndex = 0;
+
+        function showImage(index) {
+            for (var i = 0; i < totalImages; i++) {
+                images[i].style.display = 'none';
+            }
+            images[index].style.display = 'block';
+            currentIndex = index;
+            updatePageDots();
+        }
+
+        function updatePageDots() {
+            var pageDotsContainer = document.getElementById('pageDots');
+            pageDotsContainer.innerHTML = '';
+            for (var i = 0; i < totalImages; i++) {
+                var dot = document.createElement('span');
+                dot.innerHTML = '●';
+                dot.style.cursor = 'pointer';
+                dot.style.margin = '0 5px';
+                dot.style.color = (i === currentIndex) ? 'white' : 'gray';
+                dot.onclick = (function (i) {
+                    return function () {
+                        showImage(i);
+                    }
+                })(i);
+                pageDotsContainer.appendChild(dot);
+            }
+        }
+
+        showImage(currentIndex);
+
+        function nextImage() {
+            var nextIndex = (currentIndex + 1) % totalImages;
+            showImage(nextIndex);
+        }
+
+        function prevImage() {
+            var prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+            showImage(prevIndex);
+        }
+
+        var interval = setInterval(function () {
+            var nextIndex = (currentIndex + 1) % totalImages;
+            showImage(nextIndex);
+        }, 10000);
+
+        imageContainer.addEventListener('mouseover', function () {
+            clearInterval(interval);
+        });
+
+        imageContainer.addEventListener('mouseout', function () {
+            interval = setInterval(function () {
+                var nextIndex = (currentIndex + 1) % totalImages;
+                showImage(nextIndex);
+            }, 10000);
+        });
+
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function hideLoginForm() {
+            document.getElementById('loginForm').style.display = 'none';
+        }
+
+        function showSurveyForm() {
+            document.getElementById('surveyForm').style.display = 'block';
+        }
+
+        function hideSurveyForm() {
+            document.getElementById('surveyForm').style.display = 'none';
+        }
+
+        function login() {
+            // 模拟登录成功
+            hideLoginForm();
+            showPopup('登录成功');
+        }
+
+        function submitSurvey() {
+            // 模拟提交成功
+            hideSurveyForm();
+            showPopup('提交成功');
+        }
+
+        function showPopup(message) {
+            var popup = document.getElementById('popup');
+            var popupMessage = document.getElementById('popupMessage');
+            popupMessage.innerText = message;
+            popup.style.display = 'block';
+            setTimeout(function () {
+                popup.style.display = 'none';
+            }, 2000);
+        }
+
+        var bgMusic = document.getElementById('bgMusic');
+        var musicButton = document.querySelector('.audio-control button');
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicButton.textContent = 'Pause Music';
+            } else {
+                bgMusic.pause();
+                musicButton.textContent = 'Play Music';
+            }
+        }
+
+        imageContainer.addEventListener('mouseover', function () {
+            bgMusic.pause();
+        });
+
+        imageContainer.addEventListener('mouseout', function () {
+            bgMusic.play();
+        });
+		 // 音乐播放控制脚本
+var bgMusic = document.getElementById('bgMusic');
+var musicButton = document.querySelector('.audio-control button');
+
+function toggleMusic() {
+    if (bgMusic.paused) {
+        bgMusic.play();
+        musicButton.textContent = 'Pause Music';
+    } else {
+        bgMusic.pause();
+        musicButton.textContent = 'Play Music';
+    }
+}
+		imageContainer.addEventListener('mouseover', function () {
+    // 不做任何事情，音乐不会因为鼠标悬停而暂停
+});
+
+imageContainer.addEventListener('mouseout', function () {
+    // 不做任何事情，音乐不会因为鼠标移出而播放
+});
+		 // 显示开发者建议表单
+        function showDeveloperSuggestions() {
+            document.getElementById('developerSuggestionsForm').style.display = 'block';
+        }
+
+        // 隐藏开发者建议表单
+        function hideDeveloperSuggestions() {
+            document.getElementById('developerSuggestionsForm').style.display = 'none';
+        }
+
+        // 提交开发者建议
+        function submitSuggestion() {
+            var suggestion = document.getElementById('suggestion').value;
+            console.log('建议提交成功:', suggestion); 
+            hideDeveloperSuggestions();
+            showPopup('提交成功');
+        }
+
+        // 显示维护升级中的提示
+        function showMaintenance() {
+            alert('功能正在维护升级中，请稍后再试。');
+        }
+
+    </script>
+</body>
+
+</html>
